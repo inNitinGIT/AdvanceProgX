@@ -26,9 +26,9 @@ public class Main {
             System.out.println("Transfer Error: " + e.getMessage());
         }
 
-        // Invalid operation (testing validation)
+        // Invalid operation (testing validation) -> testing
         try {
-            accounts.get(2).withdraw(10000); // should fail
+            accounts.get(2).withdraw(1000); // it fails when money of withdraw is greater than my account
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
