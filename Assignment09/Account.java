@@ -3,7 +3,7 @@ package AdvanceProgX.Assignment09;
 public class Account{
     private String accountNumber;
     private String ownerName;
-    private double balance;
+    protected double balance;
 
     // Default constructor
     public Account() {
