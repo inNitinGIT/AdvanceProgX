@@ -18,7 +18,7 @@ public class CurrentAccount extends Account {
             throw new IllegalArgumentException("Overdraft limit exceeded!");
         }
 
-        setBalance(getBalance() - amount);
+       balance-= amount;
     }
 
     @Override
