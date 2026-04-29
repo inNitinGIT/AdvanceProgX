@@ -1,4 +1,6 @@
-public class Account {
+package AdvanceProgX.Assignment09;
+
+public class Account{
     private String accountNumber;
     private String ownerName;
     private double balance;
