@@ -1,10 +1,10 @@
-from order import *
-from payment import *
-from notification import *
-from storage import *
-from order_service import OrderService
-from order_manager import OrderManager
-from products_data import products
+from Assignment12.order import *
+from Assignment12.payment import *
+from Assignment12.notification import *
+from Assignment12.storage import *
+from Assignment12.order_service import OrderService
+from Assignment12.order_manager import OrderManager
+from Assignment12.products_data import products
 
 # Main program
 
