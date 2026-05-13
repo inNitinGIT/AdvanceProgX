@@ -1,3 +1,10 @@
+
+![C](https://img.shields.io/badge/language-C-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+
+
+
 1. sb = sb_init(8)
    → Creates buffer: [________] capacity=8, length=0
 
@@ -43,3 +50,21 @@ Heap Memory:
 │  │ capacity = 8  │  │     │                         │
 │  └───────────────┘  │     └─────────────────────────┘
 └─────────────────────┘
+
+
+
+$ ./app
+Hello World This is Dynamic Buffer
+
+Append Operation:
+- Average Time Complexity: O(1)
+- Worst Case (resize): O(n)
+
+
+## Future Improvements
+
+- Insert at index
+- Delete substring
+- Reserve capacity
+- Shrink buffer
+- UTF-8 support
