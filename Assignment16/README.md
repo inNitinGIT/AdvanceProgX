@@ -1,31 +1,38 @@
-# Multithreaded Producer–Consumer System Using POSIX Threads
+# Multithreaded Producer–Consumer System Using POSIX Threads and Semaphores
 
 ## Overview
 
-This project demonstrates a classic **Producer–Consumer Problem** using **POSIX Threads (pthreads)** in the C programming language.
+This project demonstrates the classic **Producer–Consumer Problem** using:
 
-The program uses:
+- POSIX Threads (`pthread`)
+- Semaphores (`semaphore.h`)
+- Mutex Locks
 
-- Threads for concurrent execution
-- Mutex locks for safe shared-memory access
-- Condition variables for thread communication and synchronization
+The program simulates a concurrent system where:
 
-It simulates a system where:
+- A Producer Thread generates items
+- A Consumer Thread consumes items
+- A shared buffer is used for communication
+- Threads synchronize safely using semaphores
 
-- A Producer Thread generates data and inserts it into a shared buffer
-- A Consumer Thread removes and processes data from the buffer
-- Threads wait correctly when resources are unavailable
+The implementation ensures:
+
+- Safe shared-memory access
+- Proper thread synchronization
+- Correct waiting and signaling mechanism
+- Prevention of race conditions
 
 ---
 
 # Objectives
 
-The main goals of this project are:
+The main objectives of this project are:
 
 - Understand multithreading in C
-- Learn synchronization techniques
-- Prevent race conditions
-- Demonstrate thread communication
+- Learn thread synchronization
+- Implement semaphores in concurrent programming
+- Prevent inconsistent behavior
+- Coordinate producer and consumer execution
 - Safely manage shared resources
 
 ---
@@ -34,7 +41,7 @@ The main goals of this project are:
 
 ## 1. POSIX Threads (pthread)
 
-POSIX threads allow multiple threads to execute concurrently inside the same process.
+POSIX threads allow multiple threads to execute concurrently within the same process.
 
 Functions used:
 
@@ -54,13 +61,20 @@ The producer and consumer share a common buffer:
 int buffer[BUFFER_SIZE];
 ```
 
-Both threads access this buffer simultaneously, so synchronization is required.
+Shared variables:
+
+```c
+int in;
+int out;
+```
+
+Because multiple threads access these variables simultaneously, synchronization is necessary.
 
 ---
 
 ## 3. Mutex (Mutual Exclusion)
 
-A mutex ensures that only one thread accesses the critical section at a time.
+A mutex protects the critical section from simultaneous access.
 
 Functions used:
 
@@ -72,99 +86,161 @@ pthread_mutex_unlock()
 ### Why Mutex Is Needed
 
 Without a mutex:
-- Multiple threads may modify shared data together
+- Threads may modify shared memory together
 - Data corruption may occur
 - Output becomes unpredictable
 
 With a mutex:
-- Shared data remains consistent
 - Only one thread enters the critical section
+- Shared data remains safe and consistent
 
 ---
 
-## 4. Condition Variables
+# 4. Semaphores
 
-Condition variables help threads wait until a condition becomes true.
+Semaphores are synchronization tools used to control access to shared resources.
+
+Header file used:
+
+```c
+#include <semaphore.h>
+```
 
 Functions used:
 
 ```c
-pthread_cond_wait()
-pthread_cond_signal()
+sem_init()
+sem_wait()
+sem_post()
+sem_destroy()
 ```
 
-### Conditions Used
+---
 
-| Condition | Action |
-|---|---|
-| Buffer Full | Producer waits |
-| Buffer Empty | Consumer waits |
+## Types of Semaphores Used
 
-This avoids:
-- Busy waiting
-- CPU wastage
-- Invalid buffer access
+### 1. Empty Semaphore
+
+```c
+sem_t empty;
+```
+
+Tracks available empty slots in the buffer.
+
+Initially:
+
+```txt
+BUFFER_SIZE
+```
+
+Producer waits if buffer becomes full.
+
+---
+
+### 2. Full Semaphore
+
+```c
+sem_t full;
+```
+
+Tracks filled slots in the buffer.
+
+Initially:
+
+```txt
+0
+```
+
+Consumer waits if buffer becomes empty.
 
 ---
 
 # Producer–Consumer Problem
 
-The Producer–Consumer Problem is a classic Operating System synchronization problem.
+The Producer–Consumer Problem is a classic synchronization problem in Operating Systems.
 
 ## Producer
-- Produces items
-- Inserts items into buffer
+- Produces data/items
+- Inserts items into shared buffer
 
 ## Consumer
 - Removes items from buffer
-- Consumes items
+- Consumes the produced data
 
 ## Shared Buffer
-Acts as temporary storage between producer and consumer.
+Acts as temporary storage between producer and consumer threads.
 
 ---
 
 # Program Workflow
 
-## Step 1: Producer Creates Item
+## Step 1: Producer Waits for Empty Slot
+
+```c
+sem_wait(&empty);
+```
+
+If no empty slot exists:
+- Producer thread waits
+
+---
+
+## Step 2: Producer Produces Item
 
 ```txt
 Producer produced item
 ```
 
-Item is inserted into buffer.
+Item is inserted into buffer safely.
 
 ---
 
-## Step 2: Consumer Removes Item
+## Step 3: Producer Signals Consumer
+
+```c
+sem_post(&full);
+```
+
+Indicates:
+- New item is available for consumption
+
+---
+
+## Step 4: Consumer Waits for Filled Slot
+
+```c
+sem_wait(&full);
+```
+
+If buffer is empty:
+- Consumer thread waits
+
+---
+
+## Step 5: Consumer Consumes Item
 
 ```txt
 Consumer consumed item
 ```
 
-Item is removed from buffer.
+Item is removed from buffer safely.
 
 ---
 
-## Step 3: Synchronization
+## Step 6: Consumer Signals Producer
 
-### If buffer becomes full:
-```txt
-Producer waiting... Buffer FULL
+```c
+sem_post(&empty);
 ```
 
-### If buffer becomes empty:
-```txt
-Consumer waiting... Buffer EMPTY
-```
-
-Threads continue execution only after receiving a signal.
+Indicates:
+- Empty slot is available again
 
 ---
 
 # Critical Section
 
-A critical section is the part of code where shared resources are accessed.
+A critical section is the portion of code where shared resources are accessed.
 
 Example:
 
@@ -184,20 +260,75 @@ Only one thread can execute this section at a time.
 
 Without synchronization:
 
-- Producer and consumer may access buffer together
+- Producer and consumer may access buffer simultaneously
 - Data may be overwritten
 - Consumer may read invalid data
 - Race conditions occur
 
-Synchronization solves this by:
+Synchronization prevents these problems by:
 - Controlling thread access
-- Ensuring ordered execution
-- Protecting shared memory
+- Managing resource availability
+- Ensuring safe execution order
 
 Result:
-- Correct output
-- Stable execution
-- Safe thread communication
+- Correct program execution
+- Safe shared-memory access
+- Predictable output
+
+---
+
+# Semaphore Working Example
+
+Suppose:
+
+```txt
+BUFFER_SIZE = 5
+```
+
+Initially:
+
+```txt
+empty = 5
+full = 0
+```
+
+---
+
+## Producer Inserts One Item
+
+```txt
+sem_wait(empty)
+empty = 4
+```
+
+After producing:
+
+```txt
+sem_post(full)
+full = 1
+```
+
+Meaning:
+- One item is available
+
+---
+
+## Consumer Removes One Item
+
+```txt
+sem_wait(full)
+full = 0
+```
+
+After consuming:
+
+```txt
+sem_post(empty)
+empty = 5
+```
+
+Meaning:
+- One empty slot becomes available
 
 ---
 
@@ -205,17 +336,20 @@ Result:
 
 This project also demonstrates several DSA concepts.
 
+---
+
 ## Circular Queue
 
 The buffer behaves like a circular queue.
 
-Variables:
+Variables used:
+
 ```c
 in
 out
 ```
 
-Used to:
+Purpose:
 - Track insertion position
 - Track removal position
 
@@ -226,6 +360,7 @@ Used to:
 Items are consumed in the same order they are produced.
 
 Example:
+
 ```txt
 Produced: 1 2 3
 Consumed: 1 2 3
@@ -238,7 +373,7 @@ Consumed: 1 2 3
 Compile using GCC:
 
 ```bash
-gcc producer_consumer.c -o producer_consumer -lpthread
+gcc producer_consumer_semaphore.c -o producer_consumer_semaphore -lpthread
 ```
 
 ---
@@ -248,7 +383,7 @@ gcc producer_consumer.c -o producer_consumer -lpthread
 Run the program:
 
 ```bash
-./producer_consumer
+./producer_consumer_semaphore
 ```
 
 ---
@@ -257,70 +392,24 @@ Run the program:
 
 ```txt
 Producer produced: 1 at index 0
-Buffer count after produce: 1
-
 Consumer consumed: 1 from index 0
-Buffer count after consume: 0
 
 Producer produced: 2 at index 1
-Buffer count after produce: 1
-
 Producer produced: 3 at index 2
-Buffer count after produce: 2
+
+Consumer consumed: 2 from index 1
+Consumer consumed: 3 from index 2
 ```
 
 ---
 
-# Advantages of Synchronization
+# Advantages of Semaphores
 
-- Prevents race conditions
-- Maintains data consistency
-- Avoids corruption
-- Improves thread coordination
-- Enables safe concurrent programming
-
----
-
-# Applications
-
-This concept is widely used in:
-
-- Operating Systems
-- Database Systems
-- Web Servers
-- Task Scheduling
-- Parallel Computing
-- Real-Time Systems
-- Networking Systems
+- Prevent race conditions
+- Coordinate thread execution
+- Manage resource allocation
+- Avoid busy waiting
+- Improve concurrent processing
+- Enable safe communication between threads
 
 ---
-
-# Related OS and DSA Topics
-
-- Multithreading
-- Thread Scheduling
-- Critical Section Problem
-- Mutex Locks
-- Semaphores
-- Monitors
-- Deadlock
-- Circular Queue
-- FIFO Scheduling
-- Concurrent Programming
-
----
-
-# Conclusion
-
-This project demonstrates how synchronization mechanisms such as mutexes and condition variables help multiple threads safely share resources in a concurrent environment.
-
-The Producer–Consumer model is one of the most important concepts in:
-- Operating Systems
-- Multithreaded Programming
-- Concurrent System Design
-
-By using proper synchronization:
-- Race conditions are avoided
-- Shared data remains safe
-- Threads cooperate efficiently
-- Program execution becomes reliable and predictable
