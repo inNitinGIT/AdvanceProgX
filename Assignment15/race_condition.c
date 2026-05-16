@@ -1,4 +1,3 @@
-// race_condition.c
 
 #include <stdio.h>
 #include <pthread.h>
