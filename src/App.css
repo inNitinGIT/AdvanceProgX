@@ -1,0 +1,116 @@
+/* =========================
+   GLOBAL APP CONTAINER
+========================= */
+
+.app-container {
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: background-color 0.3s ease;
+
+  font-family: Arial, sans-serif;
+}
+
+/* =========================
+   COUNTER CARD
+========================= */
+
+.counter-card {
+  width: 340px;
+
+  padding: 30px;
+
+  border-radius: 16px;
+
+  text-align: center;
+
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* =========================
+   HEADING
+========================= */
+
+.app-title {
+  margin-bottom: 20px;
+
+  font-size: 28px;
+}
+
+/* =========================
+   COUNTER VALUE
+========================= */
+
+.counter-value {
+  font-size: 70px;
+
+  font-weight: bold;
+
+  margin-bottom: 25px;
+}
+
+/* =========================
+   BUTTON GROUP
+========================= */
+
+.button-group {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+}
+
+/* =========================
+   COMMON BUTTON STYLING
+========================= */
+
+button {
+  border: none;
+
+  padding: 12px 18px;
+
+  border-radius: 10px;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* =========================
+   INDIVIDUAL BUTTON COLORS
+========================= */
+
+.increment-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.decrement-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.reset-btn {
+  background-color: #ffc107;
+  color: black;
+}
+
+.theme-btn {
+  width: 100%;
+
+  background-color: #007bff;
+
+  color: white;
+}
