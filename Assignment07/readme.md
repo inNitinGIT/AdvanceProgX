@@ -1,4 +1,4 @@
-
+![Python](https://img.shields.io/badge/language-Python-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
 # Assignment 7: Activity Log Analyzer in Python

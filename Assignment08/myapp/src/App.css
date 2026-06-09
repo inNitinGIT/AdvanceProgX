@@ -1,0 +1,43 @@
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
+.form,
+.filter {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+input {
+  padding: 10px;
+  flex: 1;
+}
+
+button {
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.student-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+.complexity {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+}
