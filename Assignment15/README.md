@@ -1,3 +1,8 @@
+
+![C](https://img.shields.io/badge/language-C-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+
 # Multithreaded Counter Using POSIX Threads (Pthreads)
 
 This project demonstrates how race conditions occur in multithreaded programs and how mutex synchronization solves the problem using POSIX threads (`pthread`) in C.

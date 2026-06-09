@@ -1,3 +1,8 @@
+
+![C](https://img.shields.io/badge/language-C-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+
 # Multithreaded Producer–Consumer System Using POSIX Threads and Semaphores
 
 ## Overview
