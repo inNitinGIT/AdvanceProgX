@@ -1,4 +1,4 @@
-![C](https://img.shields.io/badge/language-C-blue)
+
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
 # Assignment10: Student Management System Using Composition, Properties, and Inheritance
